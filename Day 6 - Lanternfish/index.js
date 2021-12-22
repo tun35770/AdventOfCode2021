@@ -3,7 +3,7 @@ const readline = require('readline');
 const { deflateSync } = require('zlib');
 
 var input = [];
-async function readInput(days){
+async function readInput(){
     
     const rl = readline.createInterface({
         input: fs.createReadStream('./Day 6 - Lanternfish/day6.txt'),
@@ -15,6 +15,17 @@ async function readInput(days){
         input.push(line);
     }
 
+    
+}
+
+async function main(days){
+    await readInput();
+    fishSim(days);
+}
+
+main(80);
+
+function fishSim(days){
     //create fish array
     let fish = input[0].split(',');
 
@@ -35,5 +46,3 @@ async function readInput(days){
 
     console.log(`TOTAL FISH AT DAY ${days}: ${fish.length}`);
 }
-
-readInput(80);
