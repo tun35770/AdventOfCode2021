@@ -1,6 +1,5 @@
 const fs = require('fs');
 const readline = require('readline');
-const { deflateSync } = require('zlib');
 
 var input = [];
 async function readInput(){
