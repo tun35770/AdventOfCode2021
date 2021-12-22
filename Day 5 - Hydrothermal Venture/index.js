@@ -45,6 +45,8 @@ async function readInput(){
     coords.forEach(coord => {
         let x1 = coord[0], y1 = coord[1], x2 = coord[2], y2 = coord[3];
         let lowerBound, upperBound;
+
+        //vertical line
         if(x1 == x2){
             if(y1 < y2)
                 lowerBound = y1, upperBound = y2;
@@ -54,6 +56,8 @@ async function readInput(){
                 map[x1][y]++;
             }
         }
+
+        //horizontal line
         else if(y1 == y2){
             if(x1 < x2)
                 lowerBound = x1, upperBound = x2;
@@ -63,6 +67,40 @@ async function readInput(){
             for(let x = lowerBound; x <= upperBound; x++){
                 map[x][y1]++;
             }
+        }
+
+        //45 degree line
+        else{
+            let lowerx, lowery, upperx, uppery;
+            if(x1 < x2 && y1 < y2){
+                while(x1 <= x2 && y1 <= y2){
+                    map[x1][y1]++;
+                    x1++;
+                    y1++;
+                }
+            }
+            else if (x1 < x2 && y1 > y2){
+                while(x1 <= x2 && y1 >= y2){
+                    map[x1][y1]++;
+                    x1++;
+                    y1--;
+                }
+            }
+            else if(x1 > x2 && y1 < y2){
+                while(x1 >= x2 && y1 <= y2){
+                    map[x1][y1]++;
+                    x1--;
+                    y1++;
+                }
+            }
+            else{ 
+                while(x1 >= x2 && y1 >= y2){
+                    map[x1][y1]++;
+                    x1--;
+                    y1--;
+                }
+            }
+
         }
     });
 
