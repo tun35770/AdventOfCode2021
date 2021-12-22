@@ -1,6 +1,7 @@
 const fs = require('fs');
 const readline = require('readline');
 
+let sumsMap = new Map();
 var input = [];
 async function readInput(){
     
@@ -65,9 +66,13 @@ function minFuel2(){
 
 //like factorial but adding instead of multiplying
 function sum1ToN(n){
+    if(sumsMap.get(n))
+        return sumsMap.get(n);
+        
     let sum = 0;
     for(let i = 1; i <= n; i++){
         sum += i
     }
+    sumsMap.set(n, sum);
     return sum;
 }
