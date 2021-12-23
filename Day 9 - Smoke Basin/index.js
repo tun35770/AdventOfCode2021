@@ -64,29 +64,29 @@ function findLowestPoints(heightMap){
     console.log(`Total Risk level: ${totalRiskLevel}`);
 }
 
-
-//For some reason, second and third are WRONG
-//Correct numbers were 102,96,92 which i found by sorting
-//the sizes array and checking manually
-//IDK why basic comparison seems to not want to work here
-
 //Finds sizes of largest 3 basins in the heightMap
 function findBasins(heightMap){
     let first = 0, second = 0, third = 0;
     let sizes = [];
 
+    //iterate through rows
     for(let i = 0; i < heightMap.length; i++){
-        
+        //iterate through each col in this row
         for(let j = 0; j < heightMap[0].length; j++){
-           
+           //9's arent part of basin, so dont check em
             if(heightMap[i][j] != 9)  {  
                 let size = checkForBasin(heightMap, i, j);
                 sizes.push(size);
 
-                if(size > first)
+                if(size > first){
+                    third = second;
+                    second = first;
                     first = size;
-                else if(size > second)
+                }
+                else if(size > second){
+                    third = second;
                     second = size;
+                }
                 else if(size > third)
                     third = size;
             }
@@ -97,6 +97,7 @@ function findBasins(heightMap){
     console.log(`Product: ${first*second*third}`);
 }
 
+//recursive func that returns size of the basin to the main call
 function checkForBasin(heightMap, row, col){
     
     if(heightMap[row][col] == 9)
@@ -110,13 +111,13 @@ function checkForBasin(heightMap, row, col){
 
 
     let size = 1;
-    if(row > 0)   
+    if(row > 0) //dont pass negative row
         size += checkForBasin(heightMap, row - 1, col);
-    if(row < heightMap.length - 1)    
+    if(row < heightMap.length - 1)    //dont pass out of bounds
         size += checkForBasin(heightMap, row + 1, col);
-    if(col > 0)   
+    if(col > 0)   //dont pass negative col
         size += checkForBasin(heightMap, row, col - 1);
-    if(col < heightMap[0].length - 1)  
+    if(col < heightMap[0].length - 1)  //dont pass out of bounds
         size += checkForBasin(heightMap, row, col + 1);
 
     return size;
