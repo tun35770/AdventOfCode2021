@@ -1,7 +1,4 @@
 const fs = require('fs');
-const { parse } = require('path');
-const { ppid } = require('process');
-const { decode } = require('punycode');
 const readline = require('readline');
 
 let patterns = [];
