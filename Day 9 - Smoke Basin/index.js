@@ -1,8 +1,6 @@
 const fs = require('fs');
 const readline = require('readline');
 
-let patterns = [];
-let outputs = [];
 var input = [];
 
 async function readInput(){
@@ -21,27 +19,58 @@ async function readInput(){
 async function main(){
     
     await readInput();
-    parseInput();
-
+    let heightMap = parseInput();
+    
+    findLowestPoints(heightMap);
 }
 
 main();
 
-function parseInput(){
+function findLowestPoints(heightMap){
+    let totalRiskLevel = 0;
 
-    //parse input for each pattern and output
-    input.forEach(line => {
-        let pattern = [], output = [];
-        pattern = line.split(' ');
+    for(let i = 0; i < heightMap.length; i++){
+        for(let j = 0; j < heightMap[i].length; j++){
+            let row = heightMap[i];
+            let location = row[j];
+            
+            let locationsToCompare = [];
+            if(i > 0)   
+                locationsToCompare.push(heightMap[i-1][j]);
+            if(i < heightMap.length - 1)    
+                locationsToCompare.push(heightMap[i+1][j]);
+            if(j > 0)   
+                locationsToCompare.push(heightMap[i][j-1]);
+            if(j < row.length)  
+                locationsToCompare.push(heightMap[i][j+1]);
 
-        for(let i = 0; i < 4; i++){
-          output.push(pattern.pop());
+            let isLowest = true;
+            locationsToCompare.forEach(adjLocation => {
+                if(location >= adjLocation)
+                    isLowest = false;
+            });
+
+            if(isLowest)
+                totalRiskLevel += location+1;
         }
 
-        output = output.reverse();
-        pattern.pop(); //remove '|'
+    }
 
-        patterns.push(pattern);
-        outputs.push(output);
+    console.log(`Total Risk level: ${totalRiskLevel}`);
+}
+
+function parseInput(){
+
+    //parse input 
+    let heightMap = [];
+    input.forEach(line => {
+        let row = line.split('');
+        row = row.map(function (x) {
+            return parseInt(x);
+        })
+        heightMap.push(row);
     });
+
+    
+    return heightMap;
 }
