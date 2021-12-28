@@ -24,7 +24,8 @@ async function readInput(){
 async function main(){
     await readInput();
     parseInput();
-    singleFold();
+    //singleFold();     //Part 1
+    allFolds();         //Part 2
 }
 
 main();
@@ -46,7 +47,7 @@ const parseInput = () => {
     }
 
     for(let i = 0; i < dots.length; i++){
-        dotsMap.set(maxX * dots[i][0] + dots[i][1], 1);
+        dotsMap.set(maxX * dots[i][0] + dots[i][1], dots[i]);
     }
 
     dots.sort((a,b) => {
@@ -69,4 +70,67 @@ const singleFold = () => {
     })
 
     console.log(dotsMap.size);
+}
+
+//Part 2
+//Does all folds to find the hidden code
+//Displayed as 2D array, hashtags make out letters
+const allFolds = () => {
+
+    folds.forEach(fold => {
+        let foldAxis = fold[0];
+        let foldPos = fold[1];
+
+        if(foldAxis == 'x'){
+            dotsMap.forEach((dot, key) => {
+                if(dot[0] > foldPos){
+                    //set mirror position to 1
+                    dotsMap.set(maxX * (foldPos - (dot[0] - foldPos)) + dot[1], [foldPos-(dot[0]-foldPos), dot[1]]);
+                    //delete this position
+                    dotsMap.delete(key);
+                    //dots.splice(dots.findIndex(element => {element[0] == dot[0] && element[1] == dot[1]}), 1);
+                }
+            })
+        }
+
+        else{   //foldAxis == 'y'
+            dotsMap.forEach((dot, key) => {
+                if(dot[1] > foldPos){
+                    //set mirror position to 1
+                    dotsMap.set(maxX * dot[0] + (foldPos - (dot[1] - foldPos)), [dot[0], foldPos-(dot[1]-foldPos)])
+                    //delete this position
+                    dotsMap.delete(key);
+                    //dots.splice(dots.findIndex(element => {element[0] == dot[0] && element[1] == dot[1]}), 1);
+                }
+            })
+        }
+    });
+
+    console.log(dotsMap.size);
+    let newMaxX = 0, newMaxY = 0;
+    
+    dotsMap.forEach((dot, key) => {
+        if(dot[0] > newMaxX)
+            newMaxX = dot[0];
+        if(dot[1] > newMaxY)
+            newMaxY = dot[1];
+    });
+    
+    console.log(newMaxX);
+    console.log(newMaxY);
+
+    let grid = [];
+
+    for(let i = 0; i <= newMaxX; i++){
+        let row = [];
+        for(let j = 0; j <= newMaxY; j++){
+            if(dotsMap.has(maxX * i + j))
+                row.push('#');
+            else row.push('.');
+        }
+
+        grid.push(row);
+    }
+
+    console.log(grid);
 }
